@@ -23,8 +23,16 @@ final class NirGenerator implements NirGeneratorInterface
         $this->randomizer = new Randomizer();
     }
 
-    public function generate(NirType $type = NirType::BornInFrance): string
+    public function generate(NirType $type = null): string
     {
+        if (null === $type) {
+            $cases = NirType::cases();
+
+            $key = $this->randomizer->getInt(0, count($cases) - 1);
+
+            $type = $cases[$key] ?? throw new RuntimeException('Cannot generate random NIR type');
+        }
+
         return
             $this->generateSex() . ' ' .
             $this->generateYear() . ' ' .
@@ -36,7 +44,11 @@ final class NirGenerator implements NirGeneratorInterface
 
     private function generateSex(): int
     {
-        return $this->randomizer->getInt(1, 2);
+        $sexes = [1, 2, 3, 4, 7, 8];
+
+        $key = $this->randomizer->getInt(0, count($sexes) - 1);
+
+        return $sexes[$key] ?? throw new RuntimeException('Cannot generate NIR sex digit');
     }
 
     private function generateYear(): string

@@ -63,6 +63,8 @@ class NirGenerateCommand extends Command
             $rawNir = str_replace(' ', '', $formattedNir);
             if (0 !== $this->validator->validate($rawNir, [new Nir()])->count()) {
                 $io->error("Generated key $formattedNir is not valid");
+
+                return Command::FAILURE;
             }
 
             $io->writeln($rawOutput ? $rawNir : $formattedNir);
